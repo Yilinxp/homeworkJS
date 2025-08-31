@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Badger Book</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --badger-red: #c5050c;
+            --badger-dark: #5a0016;
+            --light-gray: #f8f9fa;
+            --dark-gray: #6c757d;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-bottom: 2rem;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--badger-red) 0%, var(--badger-dark) 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .header h1 {
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        
+        .search-container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .form-control:focus {
+            border-color: var(--badger-red);
+            box-shadow: 0 0 0 0.25rem rgba(197, 5, 12, 0.25);
+        }
+        
+        .btn-badger {
+            background-color: var(--badger-red);
+            color: white;
+            padding: 10px 25px;
+            font-weight: 600;
+            border: none;
+            transition: all 0.3s;
+        }
+        
+        .btn-badger:hover {
+            background-color: var(--badger-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .student-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            margin-bottom: 25px;
+            overflow: hidden;
+            height: 100%;
+        }
+        
+        .student-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .student-header {
+            background: linear-gradient(135deg, var(--badger-red) 0%, var(--badger-dark) 100%);
+            color: white;
+            padding: 20px;
+        }
+        
+        .student-body {
+            padding: 25px;
+        }
+        
+        .badge-wisconsin {
+            background-color: #5a189a;
+            color: white;
+            font-weight: 500;
+            padding: 6px 12px;
+            border-radius: 50px;
+        }
+        
+        .interest-list {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .interest-item {
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 3px 0;
+        }
+        
+        .interest-item:hover {
+            color: var(--badger-red);
+            text-decoration: underline;
+            transform: translateX(5px);
+        }
+        
+        .results-count {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #333;
+            padding: 15px 0;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .credits {
+            font-weight: 700;
+            color: var(--badger-red);
+        }
+        
+        .student-major {
+            color: var(--badger-dark);
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+        
+        .footer {
+            background-color: #343a40;
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .student-container {
+            min-height: 500px;
+        }
+        
+        @media (max-width: 576px) {
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .search-container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1><i class="fas fa-book me-3"></i>Badger Book</h1>
+                    <p class="lead">University of Wisconsin-Madison Student Directory</p >
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <p class="mb-0"><i class="fas fa-users me-2"></i><span id="totalStudents">12</span> Students</p >
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Search Section -->
+        <div class="search-container">
+            <h3 class="mb-4"><i class="fas fa-search me-2"></i>Find Students</h3>
+            <div class="row g-3">
+                <div class="col-lg-4">
+                    <label for="nameSearch" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="nameSearch" placeholder="e.g. John Smith">
+                </div>
+                <div class="col-lg-4">
+                    <label for="majorSearch" class="form-label">Major</label>
+                    <input type="text" class="form-control" id="majorSearch" placeholder="e.g. Computer Science">
+                </div>
+                <div class="col-lg-4">
+                    <label for="interestSearch" class="form-label">Interest</label>
+                    <input type="text" class="form-control" id="interestSearch" placeholder="e.g. Programming">
+                </div>
+                <div class="col-12 text-center mt-4">
+                    <button id="searchBtn" class="btn btn-badger btn-lg"><i class="fas fa-search me-2"></i> Search</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Count -->
+        <div class="results-count" id="resultsCount">Your search resulted in 12 students.</div>
+
+        <!-- Students Grid -->
+        <div class="row student-container" id="studentsContainer">
+            <!-- Student cards will be generated here -->
+        </div>
+    </div>
+
+    <script>
+        // Sample student data
+        const students = [
+            {
+                firstName: "Avery",
+                lastName: "Clark",
+                major: "History",
+                credits: 18,
+                fromWisconsin: true,
+                interests: ["Running", "Programming", "Camping", "Yoga", "Numismatics"]
+            },
+            {
+                firstName: "Liam",
+                lastName: "Williams",
+                major: "Mathematics",
+                credits: 18,
+                fromWisconsin: true,
+                interests: ["Photography", "Music"]
+            },
+            {
+                firstName: "Charlotte",
+                lastName: "Williams",
+                major: "Mathematics",
+                credits: 16,
+                fromWisconsin: true,
+                interests: ["Archery", "Yoga", "Singing", "Snowboarding"]
+            },
+            {
+                firstName: "Liam",
+                lastName: "Anderson",
+                major: "Mathematics",
+                credits: 16,
+                fromWisconsin: false,
+                interests: ["Magic", "Surfing", "Brewing", "Amateur Radio"]
+            },
+            {
+                firstName: "Jackson",
+                lastName: "Gonzalez",
+                major: "Physics",
+                credits: 18,
+                fromWisconsin: true,
+                interests: ["Snowboarding", "Running", "Yoga", "Reading"]
+            },
+            {
+                firstName: "Isabella",
+                lastName: "Lee",
+                major: "Political Science",
+                credits: 14,
+                fromWisconsin: true,
+                interests: ["Gardening", "Snowboarding"]
+            },
+            {
+                firstName: "Aiden",
+                lastName: "Lewis",
+                major: "Physics",
+                credits: 16,
+                fromWisconsin: true,
+                interests: ["Gaming", "Philately", "Geocaching", "Snowboarding"]
+            },
+            {
+                firstName: "Lucas",
+                lastName: "Smith",
+                major: "Political Science",
+                credits: 15,
+                fromWisconsin: true,
+                interests: ["Pottery", "Stand-up Comedy", "Snowboarding"]
+            },
+            {
+                firstName: "Emily",
+                lastName: "Lopez",
+                major: "History",
+                credits: 15,
+                fromWisconsin: false,
+                interests: ["Woodworking", "Snowboarding", "Fishing", "Rock Climbing"]
+            },
+            {
+                firstName: "Elijah",
+                lastName: "Martin",
+                major: "Mathematics",
+                credits: 18,
+                fromWisconsin: true,
+                interests: ["Swimming", "Theater", "Bird Watching", "Hiking", "Snowboarding"]
+            },
+            {
+                firstName: "Olivia",
+                lastName: "Thomas",
+                major: "Biology",
+                credits: 17,
+                fromWisconsin: true,
+                interests: ["Snowboarding", "Programming"]
+            },
+            {
+                firstName: "Sophia",
+                lastName: "Walker",
+                major: "Computer Science",
+                credits: 16,
+                fromWisconsin: false,
+                interests: ["Programming", "Reading", "Hiking", "Photography"]
+            }
+        ];
+
+        // Display students on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            displayStudents(students);
+            
+            // Add event listener to search button
+            document.getElementById('searchBtn').addEventListener('click', handleSearch);
+            
+            // Update total students count
+            document.getElementById('totalStudents').textContent = students.length;
+        });
+
+        // Function to display students
+        function displayStudents(studentsArray) {
+            const container = document.getElementById('studentsContainer');
+            container.innerHTML = '';
+            
+            if (studentsArray.length === 0) {
+                container.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <i class="fas fa-search fa-3x mb-3 text-muted"></i>
+                        <h3 class="text-muted">No students found</h3>
+                        <p class="text-muted">Try adjusting your search criteria</p >
+                    </div>
+                `;
+                return;
+            }
+            
+            studentsArray.forEach(student => {
+                // Create student card column with responsive classes
+                const col = document.createElement('div');
+                col.className = 'col-12 col-md-6 col-lg-4 col-xl-3 mb-4';
+                
+                // Create student card
+                const card = document.createElement('div');
+                card.className = 'student-card';
+                
+                // Student header
+                const header = document.createElement('div');
+                header.className = 'student-header';
+                header.innerHTML = `
+                    <h4 class="mb-0">${student.firstName} ${student.lastName}</h4>
+                `;
+                
+                // Student body
+                const body = document.createElement('div');
+                body.className = 'student-body';
+                
+                // Major
+                const major = document.createElement('div');
+                major.className = 'student-major';
+                major.textContent = student.major;
+                
+                // Credits and Wisconsin info
+                const info = document.createElement('p');
+                info.className = 'mb-3';
+                info.innerHTML = `
+                    ${student.firstName} is taking <span class="credits">${student.credits} credits</span> and is 
+                    ${student.fromWisconsin ? '<span class="badge badge-wisconsin">from Wisconsin</span>' : '<span class="text-danger">NOT from Wisconsin</span>'}.
+                `;
+                
+                // Interests
+                const interestsTitle = document.createElement('p');
+                interestsTitle.className = 'mb-2';
+                interestsTitle.innerHTML = `They have <strong>${student.interests.length}</strong> interests including...`;
+                
+                const interestsList = document.createElement('ul');
+                interestsList.className = 'interest-list';
+                
+                // Add each interest as a list item
+                student.interests.forEach(interest => {
+                    const interestItem = document.createElement('li');
+                    const interestLink = document.createElement('span');
+                    interestLink.className = 'interest-item';
+                    interestLink.textContent = interest;
+                    
+                    // Add click event to search by this interest
+                    interestLink.addEventListener('click', () => {
+                        document.getElementById('nameSearch').value = '';
+                        document.getElementById('majorSearch').value = '';
+                        document.getElementById('interestSearch').value = interest;
+                        handleSearch();
+                    });
+                    
+                    interestItem.appendChild(interestLink);
+                    interestsList.appendChild(interestItem);
+                });
+                
+                // Append all elements to the card
+                body.appendChild(major);
+                body.appendChild(info);
+                body.appendChild(interestsTitle);
+                body.appendChild(interestsList);
+                
+                card.appendChild(header);
+                card.appendChild(body);
+                col.appendChild(card);
+                
+                container.appendChild(col);
+            });
+            
+            // Update results count
+            document.getElementById('resultsCount').textContent = 
+                `Your search resulted in ${studentsArray.length} student${studentsArray.length !== 1 ? 's' : ''}.`;
+        }
+
+        // Function to handle search
+        function handleSearch() {
+            const nameQuery = document.getElementById('nameSearch').value.toLowerCase().trim();
+            const majorQuery = document.getElementById('majorSearch').value.toLowerCase().trim();
+            const interestQuery = document.getElementById('interestSearch').value.toLowerCase().trim();
+            
+            const filteredStudents = students.filter(student => {
+                // Check name match (first and last name combined)
+                const fullName = `${student.firstName} ${student.lastName}`.toLowerCase();
+                const nameMatch = !nameQuery || fullName.includes(nameQuery);
+                
+                // Check major match
+                const majorMatch = !majorQuery || student.major.toLowerCase().includes(majorQuery);
+                
+                // Check interest match
+                let interestMatch = false;
+                if (!interestQuery) {
+                    interestMatch = true;
+                } else {
+                    interestMatch = student.interests.some(interest => 
+                        interest.toLowerCase().includes(interestQuery)
+                    );
+                }
+                
+                return nameMatch && majorMatch && interestMatch;
+            });
+            
+            displayStudents(filteredStudents);
+        }
+    </script>
+</body>
+</html>
